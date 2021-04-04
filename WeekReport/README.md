@@ -5,6 +5,7 @@
 ## 第5周
 ### 小组任务
 ### 涉及技术
+java(JDBC)+mysql+elasticsearch+spring boot
 ### 未来规划
 + 第6周
 + 第7周
