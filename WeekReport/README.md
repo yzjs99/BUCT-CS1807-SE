@@ -30,5 +30,9 @@ java(JDBC)+mysql+elasticsearch+spring boot
 #### 3、能够承接各小组模块的数据请求，并为各个小组的数据提供储存和整理
 
 ## 第六周
+### 第六周目标
+#### 1、学习Restful API
+#### 2、学习Spring Boot
+#### 3、学习java
 
 ## 第七周
