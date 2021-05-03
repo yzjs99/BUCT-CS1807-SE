@@ -48,3 +48,16 @@ localhost/dev-api/system/museumcollection/select/all/{userid}
 
 查询编号为id的用户收藏的博物馆
 
+localhost/dev-api/system/museumcollection
+
+新增收藏信息
+
+localhost/dev-api/system/users
+
+新增用户
+
+localhost/dev-api/system/museum
+
+新增一个博物馆
+
+
