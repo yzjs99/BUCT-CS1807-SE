@@ -25,3 +25,15 @@
 文档可[参见此处](../Docs/README.md)。
 
 对于需要变更定义的，应及时通过GitHub Issue或者社交软件~~或者宿舍砸门~~的方式，向
+
+## 目前已经实现的接口
+localhost/dev-api/system/museum/select/all/{name}
+查询名字为……的博物馆的所有信息(支持模糊查询)
+localhost/dev-api/system/comments/list
+查询评论列表
+localhost/dev-api/system/comments/select/all/{mumid}
+返回指定博物馆下所有评论
+localhost/dev-api/system/users/select/all/{Phone}
+通过手机号得到用户信息(除密码)
+localhost/dev-api/system/museumcollection/select/all/{userid}
+查询编号为id的用户收藏的博物馆
