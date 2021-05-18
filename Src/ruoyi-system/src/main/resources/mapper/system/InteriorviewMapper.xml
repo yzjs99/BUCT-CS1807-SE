@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.InteriorviewMapper">
+    
+    <resultMap type="Interiorview" id="InteriorviewResult">
+        <result property="id"    column="id"    />
+        <result property="museumid"    column="MuseumId"    />
+        <result property="address"    column="address"    />
+    </resultMap>
+
+    <sql id="selectInteriorviewVo">
+        select id, MuseumId, address from interiorview
+    </sql>
+
+    <select id="selectInteriorviewList" parameterType="Interiorview" resultMap="InteriorviewResult">
+        <include refid="selectInteriorviewVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="museumid != null "> and MuseumId = #{museumid}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+        </where>
+    </select>
+    
+    <select id="selectInteriorviewById" parameterType="Long" resultMap="InteriorviewResult">
+        <include refid="selectInteriorviewVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertInteriorview" parameterType="Interiorview" useGeneratedKeys="true" keyProperty="id">
+        insert into interiorview
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="museumid != null">MuseumId,</if>
+            <if test="address != null and address != ''">address,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="museumid != null">#{museumid},</if>
+            <if test="address != null and address != ''">#{address},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInteriorview" parameterType="Interiorview">
+        update interiorview
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="museumid != null">MuseumId = #{museumid},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteInteriorviewById" parameterType="Long">
+        delete from interiorview where id = #{id}
+    </delete>
+
+    <delete id="deleteInteriorviewByIds" parameterType="String">
+        delete from interiorview where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectInteriorviewByMuseumId" parameterType="Long" resultMap="InteriorviewResult">
+        <include refid="selectInteriorviewVo"/>
+        where MuseumId = #{MuseumId}
+    </select>
+</mapper>

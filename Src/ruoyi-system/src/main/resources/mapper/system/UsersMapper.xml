@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UsersMapper">
+    
+    <resultMap type="Users" id="UsersResult">
+        <result property="id"    column="Id"    />
+        <result property="name"    column="Name"    />
+        <result property="password"    column="Password"    />
+        <result property="phone"    column="Phone"    />
+        <result property="email"    column="Email"    />
+        <result property="pic"    column="Pic"    />
+        <result property="birth"    column="Birth"    />
+        <result property="note"    column="Note"    />
+        <result property="isforbidded"    column="isforbidded"    />
+    </resultMap>
+
+    <sql id="selectUsersVo">
+        select Id, Name, Password, Phone, Email, Pic, Birth, Note, isforbidded from users
+    </sql>
+
+    <select id="selectUsersList" parameterType="Users" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+            <if test="password != null  and password != ''"> and Password = #{password}</if>
+            <if test="phone != null  and phone != ''"> and Phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and Email = #{email}</if>
+            <if test="pic != null  and pic != ''"> and Pic = #{pic}</if>
+            <if test="birth != null "> and Birth = #{birth}</if>
+            <if test="note != null  and note != ''"> and Note = #{note}</if>
+            <if test="isforbidded != null "> and isforbidded = #{isforbidded}</if>
+        </where>
+    </select>
+    
+    <select id="selectUsersById" parameterType="Long" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        where Id = #{id}
+    </select>
+    <sql id="selectUsersVo2">
+        select Id, Name,  Phone, Email, Pic, Birth, Note from users
+    </sql>
+
+    <select id="selectUsersByPhone" parameterType="String" resultMap="UsersResult">
+        <include refid="selectUsersVo2"/>
+        where Phone = #{phone}
+    </select>
+        
+    <insert id="insertUsers" parameterType="Users" useGeneratedKeys="true" keyProperty="id">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">Name,</if>
+            <if test="password != null and password != ''">Password,</if>
+            <if test="phone != null and phone != ''">Phone,</if>
+            <if test="email != null">Email,</if>
+            <if test="pic != null">Pic,</if>
+            <if test="birth != null">Birth,</if>
+            <if test="note != null">Note,</if>
+            <if test="isforbidded != null">isforbidded,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="birth != null">#{birth},</if>
+            <if test="note != null">#{note},</if>
+            <if test="isforbidded != null">#{isforbidded},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUsers" parameterType="Users">
+        update users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">Name = #{name},</if>
+            <if test="password != null and password != ''">Password = #{password},</if>
+            <if test="phone != null and phone != ''">Phone = #{phone},</if>
+            <if test="email != null">Email = #{email},</if>
+            <if test="pic != null">Pic = #{pic},</if>
+            <if test="birth != null">Birth = #{birth},</if>
+            <if test="note != null">Note = #{note},</if>
+            <if test="isforbidded != null">isforbidded = #{isforbidded},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteUsersById" parameterType="Long">
+        delete from users where Id = #{id}
+    </delete>
+
+    <delete id="deleteUsersByIds" parameterType="String">
+        delete from users where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

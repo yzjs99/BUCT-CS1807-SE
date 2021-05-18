@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MuseumcollectionMapper">
+    
+    <resultMap type="Museumcollection" id="MuseumcollectionResult">
+        <result property="id"    column="Id"    />
+        <result property="mumid"    column="MumId"    />
+        <result property="userid"    column="UserId"    />
+    </resultMap>
+
+    <sql id="selectMuseumcollectionVo">
+        select Id, MumId, UserId from museumcollection
+    </sql>
+
+    <select id="selectMuseumcollectionList" parameterType="Museumcollection" resultMap="MuseumcollectionResult">
+        <include refid="selectMuseumcollectionVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="mumid != null "> and MumId = #{mumid}</if>
+            <if test="userid != null "> and UserId = #{userid}</if>
+        </where>
+    </select>
+    
+    <select id="selectMuseumcollectionById" parameterType="Long" resultMap="MuseumcollectionResult">
+        <include refid="selectMuseumcollectionVo"/>
+        where Id = #{id}
+    </select>
+    <select id="selectMuseumcollectionByUserid" parameterType="Long" resultMap="MuseumcollectionResult">
+        <include refid="selectMuseumcollectionVo"/>
+        where Userid = #{userid}
+    </select>
+        
+    <insert id="insertMuseumcollection" parameterType="Museumcollection" useGeneratedKeys="true" keyProperty="id">
+        insert into museumcollection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mumid != null">MumId,</if>
+            <if test="userid != null">UserId,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mumid != null">#{mumid},</if>
+            <if test="userid != null">#{userid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMuseumcollection" parameterType="Museumcollection">
+        update museumcollection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mumid != null">MumId = #{mumid},</if>
+            <if test="userid != null">UserId = #{userid},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteMuseumcollectionById" parameterType="Long">
+        delete from museumcollection where Id = #{id}
+    </delete>
+
+    <delete id="deleteMuseumcollectionByIds" parameterType="String">
+        delete from museumcollection where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

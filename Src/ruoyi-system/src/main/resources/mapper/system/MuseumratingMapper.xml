@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MuseumratingMapper">
+    
+    <resultMap type="Museumrating" id="MuseumratingResult">
+        <result property="id"    column="Id"    />
+        <result property="usersid"    column="UsersId"    />
+        <result property="museumid"    column="MuseumId"    />
+        <result property="scoreone"    column="ScoreOne"    />
+        <result property="scoretwo"    column="ScoreTwo"    />
+        <result property="scorethree"    column="ScoreThree"    />
+    </resultMap>
+
+    <sql id="selectMuseumratingVo">
+        select Id, UsersId, MuseumId, ScoreOne, ScoreTwo, ScoreThree from museumrating
+    </sql>
+
+    <select id="selectMuseumratingList" parameterType="Museumrating" resultMap="MuseumratingResult">
+        <include refid="selectMuseumratingVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="usersid != null "> and UsersId = #{usersid}</if>
+            <if test="museumid != null "> and MuseumId = #{museumid}</if>
+            <if test="scoreone != null "> and ScoreOne = #{scoreone}</if>
+            <if test="scoretwo != null "> and ScoreTwo = #{scoretwo}</if>
+            <if test="scorethree != null "> and ScoreThree = #{scorethree}</if>
+        </where>
+    </select>
+    <sql id="selectMuseumratingVo2">
+        select MuseumId from museumrating
+    </sql>
+    <select id="selectMuseumratingSortid" parameterType="Museumrating" resultMap="MuseumratingResult">
+        <include refid="selectMuseumratingVo2"/>
+        GROUP BY MuseumId
+        ORDER BY SUM(ScoreOne+ScoreTwo+ScoreThree)/COUNT(*)  DESC LIMIT 5
+    </select>
+    
+    <select id="selectMuseumratingById" parameterType="Long" resultMap="MuseumratingResult">
+        <include refid="selectMuseumratingVo"/>
+        where Id = #{id}
+    </select>
+        
+    <insert id="insertMuseumrating" parameterType="Museumrating" useGeneratedKeys="true" keyProperty="id">
+        insert into museumrating
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="usersid != null">UsersId,</if>
+            <if test="museumid != null">MuseumId,</if>
+            <if test="scoreone != null">ScoreOne,</if>
+            <if test="scoretwo != null">ScoreTwo,</if>
+            <if test="scorethree != null">ScoreThree,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="usersid != null">#{usersid},</if>
+            <if test="museumid != null">#{museumid},</if>
+            <if test="scoreone != null">#{scoreone},</if>
+            <if test="scoretwo != null">#{scoretwo},</if>
+            <if test="scorethree != null">#{scorethree},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMuseumrating" parameterType="Museumrating">
+        update museumrating
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="usersid != null">UsersId = #{usersid},</if>
+            <if test="museumid != null">MuseumId = #{museumid},</if>
+            <if test="scoreone != null">ScoreOne = #{scoreone},</if>
+            <if test="scoretwo != null">ScoreTwo = #{scoretwo},</if>
+            <if test="scorethree != null">ScoreThree = #{scorethree},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteMuseumratingById" parameterType="Long">
+        delete from museumrating where Id = #{id}
+    </delete>
+
+    <delete id="deleteMuseumratingByIds" parameterType="String">
+        delete from museumrating where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

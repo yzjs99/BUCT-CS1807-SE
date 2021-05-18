@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CollectionexplainMapper">
+    
+    <resultMap type="Collectionexplain" id="CollectionexplainResult">
+        <result property="id"    column="Id"    />
+        <result property="createid"    column="Createid"    />
+        <result property="type"    column="Type"    />
+        <result property="collectionid"    column="Collectionid"    />
+        <result property="image"    column="Image"    />
+        <result property="voice"    column="Voice"    />
+        <result property="text"    column="Text"    />
+        <result property="sponsor"    column="Sponsor"    />
+        <result property="state"    column="State"    />
+    </resultMap>
+
+    <sql id="selectCollectionexplainVo">
+        select Id, Createid, Type, Collectionid, Image, Voice, Text, Sponsor, State from collectionexplain
+    </sql>
+
+    <select id="selectCollectionexplainList" parameterType="Collectionexplain" resultMap="CollectionexplainResult">
+        <include refid="selectCollectionexplainVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="createid != null "> and Createid = #{createid}</if>
+            <if test="type != null "> and Type = #{type}</if>
+            <if test="collectionid != null "> and Collectionid = #{collectionid}</if>
+            <if test="image != null  and image != ''"> and Image = #{image}</if>
+            <if test="voice != null  and voice != ''"> and Voice = #{voice}</if>
+            <if test="text != null  and text != ''"> and Text = #{text}</if>
+            <if test="sponsor != null "> and Sponsor = #{sponsor}</if>
+            <if test="state != null "> and State = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectCollectionexplainById" parameterType="Long" resultMap="CollectionexplainResult">
+        <include refid="selectCollectionexplainVo"/>
+        where Id = #{id}
+    </select>
+        
+    <insert id="insertCollectionexplain" parameterType="Collectionexplain" useGeneratedKeys="true" keyProperty="id">
+        insert into collectionexplain
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createid != null">Createid,</if>
+            <if test="type != null">Type,</if>
+            <if test="collectionid != null">Collectionid,</if>
+            <if test="image != null">Image,</if>
+            <if test="voice != null">Voice,</if>
+            <if test="text != null">Text,</if>
+            <if test="sponsor != null">Sponsor,</if>
+            <if test="state != null">State,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createid != null">#{createid},</if>
+            <if test="type != null">#{type},</if>
+            <if test="collectionid != null">#{collectionid},</if>
+            <if test="image != null">#{image},</if>
+            <if test="voice != null">#{voice},</if>
+            <if test="text != null">#{text},</if>
+            <if test="sponsor != null">#{sponsor},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCollectionexplain" parameterType="Collectionexplain">
+        update collectionexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createid != null">Createid = #{createid},</if>
+            <if test="type != null">Type = #{type},</if>
+            <if test="collectionid != null">Collectionid = #{collectionid},</if>
+            <if test="image != null">Image = #{image},</if>
+            <if test="voice != null">Voice = #{voice},</if>
+            <if test="text != null">Text = #{text},</if>
+            <if test="sponsor != null">Sponsor = #{sponsor},</if>
+            <if test="state != null">State = #{state},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteCollectionexplainById" parameterType="Long">
+        delete from collectionexplain where Id = #{id}
+    </delete>
+
+    <delete id="deleteCollectionexplainByIds" parameterType="String">
+        delete from collectionexplain where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+    <sql id="selectCollectionexplainVo1">
+        select Id, Createid, Type, Collectionid, Text, Sponsor, State from collectionexplain
+    </sql>
+    <select id="selectCollectionexplainBycollectionid" parameterType="Long" resultMap="CollectionexplainResult">
+        <include refid="selectCollectionexplainVo1"/>
+        where Collectionid = #{collectionid}
+    </select>
+
+    <select id="selectCollectionexplainBycreateid" parameterType="Long" resultMap="CollectionexplainResult">
+        <include refid="selectCollectionexplainVo1"/>
+        where Createid = #{createid}
+    </select>
+    <resultMap id="ImageResult" type="com.ruoyi.system.domain.vo.ImageVO">
+        <result column="Image" property="image"/>
+    </resultMap>
+    <resultMap id="VoiceResult" type="com.ruoyi.system.domain.vo.VoiceVO">
+        <result column="Voice" property="voice"/>
+    </resultMap>
+    <select id="selectCollectionexplainPicById" parameterType="Long" resultMap="ImageResult">
+        select Image from collectionexplain
+        where id = #{id}
+    </select>
+    <select id="selectCollectionexplainVoiceById" parameterType="Long" resultMap="VoiceResult">
+        select Voice from collectionexplain
+        where id = #{id}
+    </select>
+
+    <parameterMap id="ImageVO" type="com.ruoyi.system.domain.vo.ImageVO">
+        <parameter property="id"/>
+        <parameter property="image"/>
+    </parameterMap>
+    <update id="updateCollectionexplainImageById" parameterMap="ImageVO">
+        update collectionexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="image != null">Image = #{image},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+    <parameterMap id="VoiceVO" type="com.ruoyi.system.domain.vo.VoiceVO">
+        <parameter property="id"/>
+        <parameter property="voice"/>
+    </parameterMap>
+    <update id="updateCollectionexplainVoiceById" parameterMap="VoiceVO">
+        update collectionexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="voice != null">Voice = #{voice},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+    <sql id="selectCollectionexplainVo2">
+        select Id from collectionexplain
+    </sql>
+    <select id="selectCollectionexplainidBycreateid" parameterType="Long" resultMap="CollectionexplainResult">
+        <include refid="selectCollectionexplainVo2"/>
+        where Createid = #{createid}
+        order by id desc limit 1
+    </select>
+</mapper>

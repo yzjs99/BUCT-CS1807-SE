@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ExhibitexplainMapper">
+    
+    <resultMap type="Exhibitexplain" id="ExhibitexplainResult">
+        <result property="id"    column="Id"    />
+        <result property="createid"    column="Createid"    />
+        <result property="type"    column="Type"    />
+        <result property="exhibitid"    column="Exhibitid"    />
+        <result property="image"    column="Image"    />
+        <result property="voice"    column="Voice"    />
+        <result property="text"    column="Text"    />
+        <result property="sponsor"    column="Sponsor"    />
+        <result property="state"    column="State"    />
+    </resultMap>
+
+    <sql id="selectExhibitexplainVo">
+        select Id, Createid, Type, Exhibitid, Image, Voice, Text, Sponsor, State from exhibitexplain
+    </sql>
+
+    <select id="selectExhibitexplainList" parameterType="Exhibitexplain" resultMap="ExhibitexplainResult">
+        <include refid="selectExhibitexplainVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="createid != null "> and Createid = #{createid}</if>
+            <if test="type != null "> and Type = #{type}</if>
+            <if test="exhibitid != null "> and Exhibitid = #{exhibitid}</if>
+            <if test="image != null  and image != ''"> and Image = #{image}</if>
+            <if test="voice != null  and voice != ''"> and Voice = #{voice}</if>
+            <if test="text != null  and text != ''"> and Text = #{text}</if>
+            <if test="sponsor != null "> and Sponsor = #{sponsor}</if>
+            <if test="state != null "> and State = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectExhibitexplainById" parameterType="Long" resultMap="ExhibitexplainResult">
+        <include refid="selectExhibitexplainVo"/>
+        where Id = #{id}
+    </select>
+        
+    <insert id="insertExhibitexplain" parameterType="Exhibitexplain" useGeneratedKeys="true" keyProperty="id">
+        insert into exhibitexplain
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createid != null">Createid,</if>
+            <if test="type != null">Type,</if>
+            <if test="exhibitid != null">Exhibitid,</if>
+            <if test="image != null">Image,</if>
+            <if test="voice != null">Voice,</if>
+            <if test="text != null">Text,</if>
+            <if test="sponsor != null">Sponsor,</if>
+            <if test="state != null">State,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createid != null">#{createid},</if>
+            <if test="type != null">#{type},</if>
+            <if test="exhibitid != null">#{exhibitid},</if>
+            <if test="image != null">#{image},</if>
+            <if test="voice != null">#{voice},</if>
+            <if test="text != null">#{text},</if>
+            <if test="sponsor != null">#{sponsor},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExhibitexplain" parameterType="Exhibitexplain">
+        update exhibitexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createid != null">Createid = #{createid},</if>
+            <if test="type != null">Type = #{type},</if>
+            <if test="exhibitid != null">Exhibitid = #{exhibitid},</if>
+            <if test="image != null">Image = #{image},</if>
+            <if test="voice != null">Voice = #{voice},</if>
+            <if test="text != null">Text = #{text},</if>
+            <if test="sponsor != null">Sponsor = #{sponsor},</if>
+            <if test="state != null">State = #{state},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteExhibitexplainById" parameterType="Long">
+        delete from exhibitexplain where Id = #{id}
+    </delete>
+
+    <delete id="deleteExhibitexplainByIds" parameterType="String">
+        delete from exhibitexplain where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <sql id="selectExhibitexplainVo1">
+        select Id, Createid, Type, Museumid, Text, Sponsor, State from exhibitexplain
+    </sql>
+    <select id="selectExhibitexplainByexhibitid" parameterType="Long" resultMap="ExhibitexplainResult">
+        <include refid="selectExhibitexplainVo1"/>
+        where Exhibitid = #{exhibitid}
+    </select>
+
+    <select id="selectExhibitexplainBycreateid" parameterType="Long" resultMap="ExhibitexplainResult">
+        <include refid="selectExhibitexplainVo1"/>
+        where Createid = #{createid}
+    </select>
+    <resultMap id="ImageResult" type="com.ruoyi.system.domain.vo.ImageVO">
+        <result column="Image" property="image"/>
+    </resultMap>
+    <resultMap id="VoiceResult" type="com.ruoyi.system.domain.vo.VoiceVO">
+        <result column="Voice" property="voice"/>
+    </resultMap>
+    <select id="selectExhibitexplainPicById" parameterType="Long" resultMap="ImageResult">
+        select Image from exhibitexplain
+        where id = #{id}
+    </select>
+    <select id="selectExhibitexplainVoiceById" parameterType="Long" resultMap="VoiceResult">
+        select Voice from exhibitexplain
+        where id = #{id}
+    </select>
+
+    <parameterMap id="ImageVO" type="com.ruoyi.system.domain.vo.ImageVO">
+        <parameter property="id"/>
+        <parameter property="image"/>
+    </parameterMap>
+    <update id="updateExhibitexplainImageById" parameterMap="ImageVO">
+        update exhibitexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="image != null">Image = #{image},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <parameterMap id="VoiceVO" type="com.ruoyi.system.domain.vo.VoiceVO">
+        <parameter property="id"/>
+        <parameter property="voice"/>
+    </parameterMap>
+    <update id="updateExhibitexplainVoiceById" parameterMap="VoiceVO">
+        update exhibitexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="voice != null">Voice = #{voice},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+    <sql id="selectExhibitexplainVo2">
+        select Id from exhibitexplain
+    </sql>
+    <select id="selectExhibitexplainidBycreateid" parameterType="Long" resultMap="ExhibitexplainResult">
+        <include refid="selectExhibitexplainVo2"/>
+        where Createid = #{createid}
+        order by id desc limit 1
+    </select>
+</mapper>

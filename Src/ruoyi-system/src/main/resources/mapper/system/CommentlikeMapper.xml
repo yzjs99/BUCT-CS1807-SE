@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommentlikeMapper">
+    
+    <resultMap type="Commentlike" id="CommentlikeResult">
+        <result property="id"    column="Id"    />
+        <result property="commentid"    column="CommentId"    />
+        <result property="userid"    column="UserId"    />
+        <result property="islike"    column="IsLike"    />
+    </resultMap>
+
+    <sql id="selectCommentlikeVo">
+        select Id, CommentId, UserId, IsLike from commentlike
+    </sql>
+
+    <select id="selectCommentlikeList" parameterType="Commentlike" resultMap="CommentlikeResult">
+        <include refid="selectCommentlikeVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="commentid != null "> and CommentId = #{commentid}</if>
+            <if test="userid != null "> and UserId = #{userid}</if>
+            <if test="islike != null "> and IsLike = #{islike}</if>
+        </where>
+    </select>
+    
+    <select id="selectCommentlikeById" parameterType="Long" resultMap="CommentlikeResult">
+        <include refid="selectCommentlikeVo"/>
+        where Id = #{id}
+    </select>
+    <select id="selectCommentlikeByCommentid" parameterType="Long" resultMap="CommentlikeResult">
+        <include refid="selectCommentlikeVo"/>
+        where Commentid = #{commentid}
+    </select>
+        
+    <insert id="insertCommentlike" parameterType="Commentlike" useGeneratedKeys="true" keyProperty="id">
+        insert into commentlike
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commentid != null">CommentId,</if>
+            <if test="userid != null">UserId,</if>
+            <if test="islike != null">IsLike,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commentid != null">#{commentid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="islike != null">#{islike},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCommentlike" parameterType="Commentlike">
+        update commentlike
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="commentid != null">CommentId = #{commentid},</if>
+            <if test="userid != null">UserId = #{userid},</if>
+            <if test="islike != null">IsLike = #{islike},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteCommentlikeById" parameterType="Long">
+        delete from commentlike where Id = #{id}
+    </delete>
+
+    <delete id="deleteCommentlikeByIds" parameterType="String">
+        delete from commentlike where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

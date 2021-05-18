@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ExhibitcollectionMapper">
+    
+    <resultMap type="Exhibitcollection" id="ExhibitcollectionResult">
+        <result property="id"    column="Id"    />
+        <result property="museumid"    column="Museumid"    />
+        <result property="exhibitname"    column="Exhibitname"    />
+        <result property="exhibitsummary"    column="Exhibitsummary"    />
+        <result property="collectionname"    column="Collectionname"    />
+        <result property="collectionimageurl"    column="Collectionimageurl"    />
+        <result property="collectionsummary"    column="Collectionsummary"    />
+    </resultMap>
+
+    <sql id="selectExhibitcollectionVo">
+        select Id, Museumid, Exhibitname, Exhibitsummary, Collectionname, Collectionimageurl, Collectionsummary from exhibitcollection
+    </sql>
+
+    <select id="selectExhibitcollectionList" parameterType="Exhibitcollection" resultMap="ExhibitcollectionResult">
+        <include refid="selectExhibitcollectionVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="museumid != null "> and Museumid = #{museumid}</if>
+            <if test="exhibitname != null  and exhibitname != ''"> and Exhibitname like concat('%', #{exhibitname}, '%')</if>
+            <if test="exhibitsummary != null  and exhibitsummary != ''"> and Exhibitsummary = #{exhibitsummary}</if>
+            <if test="collectionname != null  and collectionname != ''"> and Collectionname like concat('%', #{collectionname}, '%')</if>
+            <if test="collectionimageurl != null  and collectionimageurl != ''"> and Collectionimageurl = #{collectionimageurl}</if>
+            <if test="collectionsummary != null  and collectionsummary != ''"> and Collectionsummary = #{collectionsummary}</if>
+        </where>
+    </select>
+    
+    <select id="selectExhibitcollectionById" parameterType="Long" resultMap="ExhibitcollectionResult">
+        <include refid="selectExhibitcollectionVo"/>
+        where Id = #{id}
+    </select>
+        
+    <insert id="insertExhibitcollection" parameterType="Exhibitcollection" useGeneratedKeys="true" keyProperty="id">
+        insert into exhibitcollection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="museumid != null">Museumid,</if>
+            <if test="exhibitname != null and exhibitname != ''">Exhibitname,</if>
+            <if test="exhibitsummary != null">Exhibitsummary,</if>
+            <if test="collectionname != null and collectionname != ''">Collectionname,</if>
+            <if test="collectionimageurl != null and collectionimageurl != ''">Collectionimageurl,</if>
+            <if test="collectionsummary != null">Collectionsummary,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="museumid != null">#{museumid},</if>
+            <if test="exhibitname != null and exhibitname != ''">#{exhibitname},</if>
+            <if test="exhibitsummary != null">#{exhibitsummary},</if>
+            <if test="collectionname != null and collectionname != ''">#{collectionname},</if>
+            <if test="collectionimageurl != null and collectionimageurl != ''">#{collectionimageurl},</if>
+            <if test="collectionsummary != null">#{collectionsummary},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExhibitcollection" parameterType="Exhibitcollection">
+        update exhibitcollection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="museumid != null">Museumid = #{museumid},</if>
+            <if test="exhibitname != null and exhibitname != ''">Exhibitname = #{exhibitname},</if>
+            <if test="exhibitsummary != null">Exhibitsummary = #{exhibitsummary},</if>
+            <if test="collectionname != null and collectionname != ''">Collectionname = #{collectionname},</if>
+            <if test="collectionimageurl != null and collectionimageurl != ''">Collectionimageurl = #{collectionimageurl},</if>
+            <if test="collectionsummary != null">Collectionsummary = #{collectionsummary},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteExhibitcollectionById" parameterType="Long">
+        delete from exhibitcollection where Id = #{id}
+    </delete>
+
+    <delete id="deleteExhibitcollectionByIds" parameterType="String">
+        delete from exhibitcollection where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <sql id="selectExhibitcollectionVo1">
+        select Exhibitname, Exhibitsummary from exhibitcollection
+    </sql>
+    <select id="selectExhibitcollectionByMuseumid" parameterType="Long" resultMap="ExhibitcollectionResult">
+        <include refid="selectExhibitcollectionVo1"/>
+        where Museumid = #{Museumid} and exhibitsummary != ''
+        <!--        order by Id asc limit 1-->
+    </select>
+</mapper>

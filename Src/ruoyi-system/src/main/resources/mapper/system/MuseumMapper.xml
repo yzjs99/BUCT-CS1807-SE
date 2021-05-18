@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MuseumMapper">
+    
+    <resultMap type="Museum" id="MuseumResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="address"    column="address"    />
+        <result property="ticketprice"    column="TicketPrice"    />
+        <result property="openinghours"    column="OpeningHours"    />
+        <result property="suggestedtraveltime"    column="Suggestedtraveltime"    />
+        <result property="museumlevel"    column="Museumlevel"    />
+        <result property="units"    column="units"    />
+        <result property="attractionlevel"    column="attractionlevel"    />
+        <result property="number"    column="number"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="scenery"    column="Scenery"    />
+        <result property="howtogo"    column="Howtogo"    />
+        <result property="scenicspotsaround"    column="Scenicspotsaround"    />
+        <result property="cover"    column="cover"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="note"    column="note"    />
+    </resultMap>
+
+    <sql id="selectMuseumVo">
+        select id, name, type, address, TicketPrice, OpeningHours, Suggestedtraveltime, Museumlevel, units, attractionlevel, number, introduction, Scenery, Howtogo, Scenicspotsaround, cover, longitude, latitude, note from museum
+    </sql>
+    <sql id="selectMuseumVo2">
+        select id, name, type, address, TicketPrice, OpeningHours, Suggestedtraveltime, Museumlevel, units, attractionlevel, number, introduction, Scenery, Howtogo,  cover, longitude, latitude, note from museum
+    </sql>
+
+    <select id="selectMuseumList" parameterType="Museum" resultMap="MuseumResult">
+        <include refid="selectMuseumVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="ticketprice != null "> and TicketPrice = #{ticketprice}</if>
+            <if test="openinghours != null  and openinghours != ''"> and OpeningHours = #{openinghours}</if>
+            <if test="suggestedtraveltime != null  and suggestedtraveltime != ''"> and Suggestedtraveltime = #{suggestedtraveltime}</if>
+            <if test="museumlevel != null  and museumlevel != ''"> and Museumlevel = #{museumlevel}</if>
+            <if test="units != null  and units != ''"> and units = #{units}</if>
+            <if test="attractionlevel != null  and attractionlevel != ''"> and attractionlevel = #{attractionlevel}</if>
+            <if test="number != null  and number != ''"> and number = #{number}</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+            <if test="scenery != null  and scenery != ''"> and Scenery = #{scenery}</if>
+            <if test="howtogo != null  and howtogo != ''"> and Howtogo = #{howtogo}</if>
+            <if test="scenicspotsaround != null  and scenicspotsaround != ''"> and Scenicspotsaround = #{scenicspotsaround}</if>
+            <if test="cover != null  and cover != ''"> and cover = #{cover}</if>
+            <if test="longitude != null "> and longitude = #{longitude}</if>
+            <if test="latitude != null "> and latitude = #{latitude}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+        </where>
+    </select>
+    
+    <select id="selectMuseumById" parameterType="Long" resultMap="MuseumResult">
+        <include refid="selectMuseumVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectMuseumByName" parameterType="String" resultMap="MuseumResult">
+        <include refid="selectMuseumVo2"/>
+        where 1 = 1
+        <if test="name != null and name != ''">
+            AND name like concat('%', #{name}, '%')
+        </if>
+        order by id
+    </select>
+    <insert id="insertMuseum" parameterType="Museum" useGeneratedKeys="true" keyProperty="id">
+        insert into museum
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="address != null">address,</if>
+            <if test="ticketprice != null">TicketPrice,</if>
+            <if test="openinghours != null">OpeningHours,</if>
+            <if test="suggestedtraveltime != null">Suggestedtraveltime,</if>
+            <if test="museumlevel != null">Museumlevel,</if>
+            <if test="units != null">units,</if>
+            <if test="attractionlevel != null">attractionlevel,</if>
+            <if test="number != null">number,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="scenery != null">Scenery,</if>
+            <if test="howtogo != null">Howtogo,</if>
+            <if test="scenicspotsaround != null">Scenicspotsaround,</if>
+            <if test="cover != null">cover,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="note != null">note,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="address != null">#{address},</if>
+            <if test="ticketprice != null">#{ticketprice},</if>
+            <if test="openinghours != null">#{openinghours},</if>
+            <if test="suggestedtraveltime != null">#{suggestedtraveltime},</if>
+            <if test="museumlevel != null">#{museumlevel},</if>
+            <if test="units != null">#{units},</if>
+            <if test="attractionlevel != null">#{attractionlevel},</if>
+            <if test="number != null">#{number},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="scenery != null">#{scenery},</if>
+            <if test="howtogo != null">#{howtogo},</if>
+            <if test="scenicspotsaround != null">#{scenicspotsaround},</if>
+            <if test="cover != null">#{cover},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="note != null">#{note},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMuseum" parameterType="Museum">
+        update museum
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="ticketprice != null">TicketPrice = #{ticketprice},</if>
+            <if test="openinghours != null">OpeningHours = #{openinghours},</if>
+            <if test="suggestedtraveltime != null">Suggestedtraveltime = #{suggestedtraveltime},</if>
+            <if test="museumlevel != null">Museumlevel = #{museumlevel},</if>
+            <if test="units != null">units = #{units},</if>
+            <if test="attractionlevel != null">attractionlevel = #{attractionlevel},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="scenery != null">Scenery = #{scenery},</if>
+            <if test="howtogo != null">Howtogo = #{howtogo},</if>
+            <if test="scenicspotsaround != null">Scenicspotsaround = #{scenicspotsaround},</if>
+            <if test="cover != null">cover = #{cover},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="note != null">note = #{note},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMuseumById" parameterType="Long">
+        delete from museum where id = #{id}
+    </delete>
+
+    <delete id="deleteMuseumByIds" parameterType="String">
+        delete from museum where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

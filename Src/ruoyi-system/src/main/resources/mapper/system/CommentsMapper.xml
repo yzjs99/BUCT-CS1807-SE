@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommentsMapper">
+    
+    <resultMap type="Comments" id="CommentsResult">
+        <result property="id"    column="Id"    />
+        <result property="userid"    column="UserId"    />
+        <result property="mumid"    column="MumId"    />
+        <result property="username"    column="UserName"    />
+        <result property="time"    column="Time"    />
+        <result property="content"    column="Content"    />
+    </resultMap>
+
+    <sql id="selectCommentsVo">
+        select Id, UserId, MumId, UserName, Time, Content from comments
+    </sql>
+
+    <select id="selectCommentsList" parameterType="Comments" resultMap="CommentsResult">
+        <include refid="selectCommentsVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="userid != null "> and UserId = #{userid}</if>
+            <if test="mumid != null "> and MumId = #{mumid}</if>
+            <if test="username != null  and username != ''"> and UserName like concat('%', #{username}, '%')</if>
+            <if test="time != null "> and Time = #{time}</if>
+            <if test="content != null  and content != ''"> and Content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectCommentsById" parameterType="Long" resultMap="CommentsResult">
+        <include refid="selectCommentsVo"/>
+        where Id = #{id}
+    </select>
+	<select id="selectCommentsByMumid" parameterType="Long" resultMap="CommentsResult">
+		<include refid="selectCommentsVo"/>
+		where Mumid = #{mumid}
+	</select>
+    <insert id="insertComments" parameterType="Comments" useGeneratedKeys="true" keyProperty="id">
+        insert into comments
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">UserId,</if>
+            <if test="mumid != null">MumId,</if>
+            <if test="username != null and username != ''">UserName,</if>
+            <if test="time != null">Time,</if>
+            <if test="content != null">Content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null">#{userid},</if>
+            <if test="mumid != null">#{mumid},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="time != null">#{time},</if>
+            <if test="content != null">#{content},</if>
+         </trim>
+    </insert>
+
+    <update id="updateComments" parameterType="Comments">
+        update comments
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userid != null">UserId = #{userid},</if>
+            <if test="mumid != null">MumId = #{mumid},</if>
+            <if test="username != null and username != ''">UserName = #{username},</if>
+            <if test="time != null">Time = #{time},</if>
+            <if test="content != null">Content = #{content},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteCommentsById" parameterType="Long">
+        delete from comments where Id = #{id}
+    </delete>
+
+    <delete id="deleteCommentsByIds" parameterType="String">
+        delete from comments where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

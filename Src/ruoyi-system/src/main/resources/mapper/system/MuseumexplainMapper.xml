@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MuseumexplainMapper">
+    
+    <resultMap type="Museumexplain" id="MuseumexplainResult">
+        <result property="id"    column="Id"    />
+        <result property="createid"    column="Createid"    />
+        <result property="type"    column="Type"    />
+        <result property="museumid"    column="Museumid"    />
+<!--        <result property="image"    column="Image"    />-->
+<!--        <result property="voice"    column="Voice"    />-->
+        <result property="text"    column="Text"    />
+        <result property="sponsor"    column="Sponsor"    />
+        <result property="state"    column="State"    />
+    </resultMap>
+
+    <sql id="selectMuseumexplainVo">
+        select Id, Createid, Type, Museumid, Image, Voice, Text, Sponsor, State from museumexplain
+    </sql>
+
+    <select id="selectMuseumexplainList" parameterType="Museumexplain" resultMap="MuseumexplainResult">
+        <include refid="selectMuseumexplainVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="createid != null "> and Createid = #{createid}</if>
+            <if test="type != null "> and Type = #{type}</if>
+            <if test="museumid != null "> and Museumid = #{museumid}</if>
+            <if test="image != null  and image != ''"> and Image = #{image}</if>
+            <if test="voice != null  and voice != ''"> and Voice = #{voice}</if>
+            <if test="text != null  and text != ''"> and Text = #{text}</if>
+            <if test="sponsor != null "> and Sponsor = #{sponsor}</if>
+            <if test="state != null "> and State = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectMuseumexplainById" parameterType="Long" resultMap="MuseumexplainResult">
+        <include refid="selectMuseumexplainVo"/>
+        where Id = #{id}
+    </select>
+        
+    <insert id="insertMuseumexplain" parameterType="Museumexplain" useGeneratedKeys="true" keyProperty="id">
+        insert into museumexplain
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createid != null">Createid,</if>
+            <if test="type != null">Type,</if>
+            <if test="museumid != null">Museumid,</if>
+            <if test="image != null">Image,</if>
+            <if test="voice != null">Voice,</if>
+            <if test="text != null">Text,</if>
+            <if test="sponsor != null">Sponsor,</if>
+            <if test="state != null">State,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createid != null">#{createid},</if>
+            <if test="type != null">#{type},</if>
+            <if test="museumid != null">#{museumid},</if>
+            <if test="image != null">#{image},</if>
+            <if test="voice != null">#{voice},</if>
+            <if test="text != null">#{text},</if>
+            <if test="sponsor != null">#{sponsor},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMuseumexplain" parameterType="Museumexplain">
+        update museumexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createid != null">Createid = #{createid},</if>
+            <if test="type != null">Type = #{type},</if>
+            <if test="museumid != null">Museumid = #{museumid},</if>
+            <if test="image != null">Image = #{image},</if>
+            <if test="voice != null">Voice = #{voice},</if>
+            <if test="text != null">Text = #{text},</if>
+            <if test="sponsor != null">Sponsor = #{sponsor},</if>
+            <if test="state != null">State = #{state},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteMuseumexplainById" parameterType="Long">
+        delete from museumexplain where Id = #{id}
+    </delete>
+
+    <delete id="deleteMuseumexplainByIds" parameterType="String">
+        delete from museumexplain where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <sql id="selectMuseumexplainVo1">
+        select Id, Createid, Type, Museumid, Text, Sponsor, State from museumexplain
+    </sql>
+    <select id="selectMuseumexplainBymuseumid" parameterType="Long" resultMap="MuseumexplainResult">
+        <include refid="selectMuseumexplainVo1"/>
+        where Museumid = #{museumid}
+    </select>
+
+    <select id="selectMuseumexplainBycreateid" parameterType="Long" resultMap="MuseumexplainResult">
+        <include refid="selectMuseumexplainVo1"/>
+        where Createid = #{createid}
+    </select>
+    <resultMap id="ImageResult" type="com.ruoyi.system.domain.vo.ImageVO">
+        <result column="Image" property="image"/>
+        <result column="Id" property="id"/>
+    </resultMap>
+    <resultMap id="VoiceResult" type="com.ruoyi.system.domain.vo.VoiceVO">
+        <result column="Voice" property="voice"/>
+    </resultMap>
+    <select id="selectMuseumexplainPicById" parameterType="Long" resultMap="ImageResult">
+        select Image from museumexplain
+        where id = #{id}
+    </select>
+    <select id="selectMuseumexplainVoiceById" parameterType="Long" resultMap="VoiceResult">
+        select Voice from museumexplain
+        where id = #{id}
+    </select>
+
+
+
+    <parameterMap id="ImageVO" type="com.ruoyi.system.domain.vo.ImageVO">
+        <parameter property="id"/>
+        <parameter property="image"/>
+    </parameterMap>
+    <update id="updateMuseumexplainImageById" parameterMap="ImageVO">
+        update museumexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="image != null">Image = #{image},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+    <parameterMap id="VoiceVO" type="com.ruoyi.system.domain.vo.VoiceVO">
+        <parameter property="id"/>
+        <parameter property="voice"/>
+    </parameterMap>
+    <update id="updateMuseumexplainVoiceById" parameterMap="VoiceVO">
+        update museumexplain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="voice != null">Voice = #{voice},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+    <sql id="selectMuseumexplainVo2">
+        select Id from museumexplain
+    </sql>
+    <select id="selectMuseumexplainidBycreateid" parameterType="Long" resultMap="MuseumexplainResult">
+        <include refid="selectMuseumexplainVo2"/>
+        where Createid = #{createid}
+        order by id desc limit 1
+    </select>
+</mapper>

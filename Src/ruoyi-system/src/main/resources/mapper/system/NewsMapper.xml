@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.NewsMapper">
+    
+    <resultMap type="News" id="NewsResult">
+        <result property="id"    column="Id"    />
+        <result property="title"    column="Title"    />
+        <result property="author"    column="Author"    />
+        <result property="time"    column="Time"    />
+        <result property="content"    column="Content"    />
+        <result property="link"    column="Link"    />
+        <result property="gettime"    column="GetTime"    />
+        <result property="mumname"    column="MumName"    />
+        <result property="classificationone"    column="ClassificationOne"    />
+        <result property="classificationtwo"    column="ClassificationTwo"    />
+        <result property="classificationthree"    column="ClassificationThree"    />
+    </resultMap>
+
+    <sql id="selectNewsVo">
+        select Id, Title, Author, Time, Content, Link, GetTime, MumName, ClassificationOne, ClassificationTwo, ClassificationThree from news
+    </sql>
+
+    <select id="selectNewsList" parameterType="News" resultMap="NewsResult">
+        <include refid="selectNewsVo"/>
+        <where>  
+            <if test="id != null "> and Id = #{id}</if>
+            <if test="title != null  and title != ''"> and Title = #{title}</if>
+            <if test="author != null  and author != ''"> and Author = #{author}</if>
+            <if test="time != null  and time != ''"> and Time = #{time}</if>
+            <if test="content != null  and content != ''"> and Content = #{content}</if>
+            <if test="link != null  and link != ''"> and Link = #{link}</if>
+            <if test="gettime != null  and gettime != ''"> and GetTime = #{gettime}</if>
+            <if test="mumname != null  and mumname != ''"> and MumName like concat('%', #{mumname}, '%')</if>
+            <if test="classificationone != null  and classificationone != ''"> and ClassificationOne = #{classificationone}</if>
+            <if test="classificationtwo != null  and classificationtwo != ''"> and ClassificationTwo = #{classificationtwo}</if>
+            <if test="classificationthree != null  and classificationthree != ''"> and ClassificationThree = #{classificationthree}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewsById" parameterType="Long" resultMap="NewsResult">
+        <include refid="selectNewsVo"/>
+        where Id = #{id}
+    </select>
+
+    <select id="selectNewsByMumname2" parameterType="String" resultMap="NewsResult">
+        <include refid="selectNewsVo"/>
+        where 1 = 1
+        <if test="mumname != null and mumname != ''">
+            AND mumname like concat('%', #{mumname}, '%')
+        </if>
+        AND id>4193
+        order by id desc limit 10
+    </select>
+    <select id="selectNewsByMumname" parameterType="String" resultMap="NewsResult">
+        <include refid="selectNewsVo"/>
+        where 1 = 1
+        <if test="mumname != null and mumname != ''">
+            AND mumname like concat('%', #{mumname}, '%')
+        </if>
+        order by id desc limit 10
+    </select>
+    <insert id="insertNews" parameterType="News" useGeneratedKeys="true" keyProperty="id">
+        insert into news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">Title,</if>
+            <if test="author != null">Author,</if>
+            <if test="time != null">Time,</if>
+            <if test="content != null">Content,</if>
+            <if test="link != null">Link,</if>
+            <if test="gettime != null">GetTime,</if>
+            <if test="mumname != null">MumName,</if>
+            <if test="classificationone != null">ClassificationOne,</if>
+            <if test="classificationtwo != null">ClassificationTwo,</if>
+            <if test="classificationthree != null">ClassificationThree,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="author != null">#{author},</if>
+            <if test="time != null">#{time},</if>
+            <if test="content != null">#{content},</if>
+            <if test="link != null">#{link},</if>
+            <if test="gettime != null">#{gettime},</if>
+            <if test="mumname != null">#{mumname},</if>
+            <if test="classificationone != null">#{classificationone},</if>
+            <if test="classificationtwo != null">#{classificationtwo},</if>
+            <if test="classificationthree != null">#{classificationthree},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNews" parameterType="News">
+        update news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">Title = #{title},</if>
+            <if test="author != null">Author = #{author},</if>
+            <if test="time != null">Time = #{time},</if>
+            <if test="content != null">Content = #{content},</if>
+            <if test="link != null">Link = #{link},</if>
+            <if test="gettime != null">GetTime = #{gettime},</if>
+            <if test="mumname != null">MumName = #{mumname},</if>
+            <if test="classificationone != null">ClassificationOne = #{classificationone},</if>
+            <if test="classificationtwo != null">ClassificationTwo = #{classificationtwo},</if>
+            <if test="classificationthree != null">ClassificationThree = #{classificationthree},</if>
+        </trim>
+        where Id = #{id}
+    </update>
+
+    <delete id="deleteNewsById" parameterType="Long">
+        delete from news where Id = #{id}
+    </delete>
+
+    <delete id="deleteNewsByIds" parameterType="String">
+        delete from news where Id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
